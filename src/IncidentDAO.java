@@ -7,7 +7,7 @@ import java.util.List;
 
 public class IncidentDAO {
 
-    // 1. CREATE: Add New Incident
+    // 1. CREATE
     public boolean addIncident(String location, String emergencyType) {
         String sql = "INSERT INTO incidents (location, emergency_type) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -21,7 +21,7 @@ public class IncidentDAO {
         }
     }
 
-    // 2. READ: Get All Incidents
+    // 2. READ ALL
     public List<Incident> getAllIncidents() {
         List<Incident> list = new ArrayList<>();
         String sql = "SELECT * FROM incidents";
@@ -43,7 +43,48 @@ public class IncidentDAO {
         return list;
     }
 
-    // 3. UPDATE: Update Incident Status
+    // 3. SEARCH BY TYPE OR STATUS
+    public List<Incident> searchIncidents(String keyword) {
+        List<Incident> list = new ArrayList<>();
+        String sql = "SELECT * FROM incidents WHERE emergency_type LIKE ? OR status LIKE ? OR location LIKE ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String searchPattern = "%" + keyword + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new Incident(
+                    rs.getInt("id"),
+                    rs.getString("location"),
+                    rs.getString("emergency_type"),
+                    rs.getString("status"),
+                    rs.getString("created_at")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // 4. CHECK IF ID EXISTS (Validation Helper)
+    public boolean existsById(int id) {
+        String sql = "SELECT id FROM incidents WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 5. UPDATE STATUS
     public boolean updateStatus(int id, String newStatus) {
         String sql = "UPDATE incidents SET status = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -57,7 +98,7 @@ public class IncidentDAO {
         }
     }
 
-    // 4. DELETE: Remove Incident
+    // 6. DELETE
     public boolean deleteIncident(int id) {
         String sql = "DELETE FROM incidents WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();

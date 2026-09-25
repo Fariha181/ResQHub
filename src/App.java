@@ -12,38 +12,28 @@ public class App {
             System.out.println("========================================");
             System.out.println("1. View All Incidents");
             System.out.println("2. Report New Incident (Create)");
-            System.out.println("3. Update Incident Status");
-            System.out.println("4. Delete Incident");
-            System.out.println("5. Exit");
-            System.out.print("Enter your choice (1-5): ");
+            System.out.println("3. Search Incidents (Filter)");
+            System.out.println("4. Update Incident Status");
+            System.out.println("5. Delete Incident");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice (1-6): ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            int choice = getIntInput(scanner);
 
             switch (choice) {
                 case 1:
-                    System.out.println("\n--- INCIDENT LIST ---");
-                    List<Incident> list = dao.getAllIncidents();
-                    if (list.isEmpty()) {
-                        System.out.println("No incidents found.");
-                    } else {
-                        for (Incident inc : list) {
-                            System.out.println("ID: " + inc.getId() + 
-                                               " | Location: " + inc.getLocation() + 
-                                               " | Type: " + inc.getEmergencyType() + 
-                                               " | Status: " + inc.getStatus() + 
-                                               " | Time: " + inc.getCreatedAt());
-                        }
-                    }
+                    printList(dao.getAllIncidents());
                     break;
 
                 case 2:
                     System.out.print("\nEnter Location: ");
-                    String location = scanner.nextLine();
+                    String location = scanner.nextLine().trim();
                     System.out.print("Enter Emergency Type: ");
-                    String type = scanner.nextLine();
+                    String type = scanner.nextLine().trim();
 
-                    if (dao.addIncident(location, type)) {
+                    if (location.isEmpty() || type.isEmpty()) {
+                        System.out.println(" ERROR: Location and Type cannot be empty!");
+                    } else if (dao.addIncident(location, type)) {
                         System.out.println(" SUCCESS: Incident reported successfully!");
                     } else {
                         System.out.println(" ERROR: Failed to report incident.");
@@ -51,11 +41,22 @@ public class App {
                     break;
 
                 case 3:
+                    System.out.print("\nEnter keyword to search (Location / Type / Status): ");
+                    String keyword = scanner.nextLine().trim();
+                    printList(dao.searchIncidents(keyword));
+                    break;
+
+                case 4:
                     System.out.print("\nEnter Incident ID to Update: ");
-                    int updateId = scanner.nextInt();
-                    scanner.nextLine(); 
-                    System.out.print("Enter New Status (Pending/In Progress/Resolved): ");
-                    String newStatus = scanner.nextLine();
+                    int updateId = getIntInput(scanner);
+
+                    if (!dao.existsById(updateId)) {
+                        System.out.println(" ERROR: Incident ID " + updateId + " does not exist!");
+                        break;
+                    }
+
+                    System.out.print("Enter New Status (Pending / In Progress / Resolved): ");
+                    String newStatus = scanner.nextLine().trim();
 
                     if (dao.updateStatus(updateId, newStatus)) {
                         System.out.println(" SUCCESS: Status updated successfully!");
@@ -64,9 +65,14 @@ public class App {
                     }
                     break;
 
-                case 4:
+                case 5:
                     System.out.print("\nEnter Incident ID to Delete: ");
-                    int deleteId = scanner.nextInt();
+                    int deleteId = getIntInput(scanner);
+
+                    if (!dao.existsById(deleteId)) {
+                        System.out.println(" ERROR: Incident ID " + deleteId + " does not exist!");
+                        break;
+                    }
 
                     if (dao.deleteIncident(deleteId)) {
                         System.out.println(" SUCCESS: Incident deleted successfully!");
@@ -75,13 +81,40 @@ public class App {
                     }
                     break;
 
-                case 5:
+                case 6:
                     System.out.println("Exiting ResQHub. Stay Safe!");
                     scanner.close();
                     System.exit(0);
 
                 default:
-                    System.out.println(" Invalid option! Please select between 1 and 5.");
+                    System.out.println(" Invalid option! Please select between 1 and 6.");
+            }
+        }
+    }
+
+    // Helper: Validates numeric integer inputs safely
+    private static int getIntInput(Scanner scanner) {
+        while (!scanner.hasNextInt()) {
+            System.out.print(" Invalid input! Please enter a valid number: ");
+            scanner.next();
+        }
+        int number = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        return number;
+    }
+
+    // Helper: Prints incident details neatly
+    private static void printList(List<Incident> list) {
+        System.out.println("\n--- INCIDENT LIST ---");
+        if (list.isEmpty()) {
+            System.out.println("No matching incidents found.");
+        } else {
+            for (Incident inc : list) {
+                System.out.println("ID: " + inc.getId() + 
+                                   " | Location: " + inc.getLocation() + 
+                                   " | Type: " + inc.getEmergencyType() + 
+                                   " | Status: " + inc.getStatus() + 
+                                   " | Time: " + inc.getCreatedAt());
             }
         }
     }
