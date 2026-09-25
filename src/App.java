@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        IncidentDAO dao = new IncidentDAO();
+        IncidentController controller = new IncidentController();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -22,7 +22,7 @@ public class App {
 
             switch (choice) {
                 case 1:
-                    printList(dao.getAllIncidents());
+                    printList(controller.getAllIncidents());
                     break;
 
                 case 2:
@@ -31,54 +31,37 @@ public class App {
                     System.out.print("Enter Emergency Type: ");
                     String type = scanner.nextLine().trim();
 
-                    if (location.isEmpty() || type.isEmpty()) {
-                        System.out.println(" ERROR: Location and Type cannot be empty!");
-                    } else if (dao.addIncident(location, type)) {
-                        System.out.println(" SUCCESS: Incident reported successfully!");
-                    } else {
-                        System.out.println(" ERROR: Failed to report incident.");
-                    }
+                    // Creating Request Object to pass data into Controller
+                    IncidentRequest createReq = new IncidentRequest(location, type);
+                    String createResponse = controller.createIncident(createReq);
+                    System.out.println(createResponse);
                     break;
 
                 case 3:
                     System.out.print("\nEnter keyword to search (Location / Type / Status): ");
                     String keyword = scanner.nextLine().trim();
-                    printList(dao.searchIncidents(keyword));
+                    printList(controller.searchIncidents(keyword));
                     break;
 
                 case 4:
                     System.out.print("\nEnter Incident ID to Update: ");
                     int updateId = getIntInput(scanner);
 
-                    if (!dao.existsById(updateId)) {
-                        System.out.println(" ERROR: Incident ID " + updateId + " does not exist!");
-                        break;
-                    }
-
                     System.out.print("Enter New Status (Pending / In Progress / Resolved): ");
                     String newStatus = scanner.nextLine().trim();
 
-                    if (dao.updateStatus(updateId, newStatus)) {
-                        System.out.println(" SUCCESS: Status updated successfully!");
-                    } else {
-                        System.out.println(" ERROR: Failed to update status.");
-                    }
+                    // Creating Request Object for Update
+                    IncidentRequest updateReq = new IncidentRequest(newStatus);
+                    String updateResponse = controller.updateIncidentStatus(updateId, updateReq);
+                    System.out.println(updateResponse);
                     break;
 
                 case 5:
                     System.out.print("\nEnter Incident ID to Delete: ");
                     int deleteId = getIntInput(scanner);
 
-                    if (!dao.existsById(deleteId)) {
-                        System.out.println(" ERROR: Incident ID " + deleteId + " does not exist!");
-                        break;
-                    }
-
-                    if (dao.deleteIncident(deleteId)) {
-                        System.out.println(" SUCCESS: Incident deleted successfully!");
-                    } else {
-                        System.out.println(" ERROR: Failed to delete incident.");
-                    }
+                    String deleteResponse = controller.deleteIncident(deleteId);
+                    System.out.println(deleteResponse);
                     break;
 
                 case 6:
@@ -92,18 +75,16 @@ public class App {
         }
     }
 
-    // Helper: Validates numeric integer inputs safely
     private static int getIntInput(Scanner scanner) {
         while (!scanner.hasNextInt()) {
             System.out.print(" Invalid input! Please enter a valid number: ");
             scanner.next();
         }
         int number = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+        scanner.nextLine();
         return number;
     }
 
-    // Helper: Prints incident details neatly
     private static void printList(List<Incident> list) {
         System.out.println("\n--- INCIDENT LIST ---");
         if (list.isEmpty()) {
