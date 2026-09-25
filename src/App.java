@@ -17,35 +17,49 @@ public class App {
             if (conn != null) {
                 System.out.println("SUCCESS: Connected to ResQHub Database!\n");
 
-                // ১. নতুন একটি টেস্ট ডাটা ইনসার্ট করা
-                String insertSQL = "INSERT INTO incidents (location, emergency_type) VALUES (?, ?)";
-                PreparedStatement stmt = conn.prepareStatement(insertSQL);
-                stmt.setString(1, "Uttara Sector 3, Dhaka");
-                stmt.setString(2, "Flood Relief");
-                stmt.executeUpdate();
-                System.out.println("--- New Data Inserted Successfully ---");
-
-                // ২. ডাটাবেস থেকে সব ডাটা নিয়ে এসে প্রদর্শন করা (VIEW)
-                String selectSQL = "SELECT * FROM incidents";
-                Statement selectStmt = conn.createStatement();
-                ResultSet rs = selectStmt.executeQuery(selectSQL);
-
-                System.out.println("\n================ RESQHUB INCIDENTS LIST ================");
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String location = rs.getString("location");
-                    String type = rs.getString("emergency_type");
-                    String status = rs.getString("status");
-                    String time = rs.getString("created_at");
-
-                    System.out.println("ID: " + id + " | Location: " + location + " | Type: " + type + " | Status: " + status + " | Time: " + time);
+                // ১. UPDATE: ID = 1 এর Status 'Pending' থেকে 'Resolved' করা
+                String updateSQL = "UPDATE incidents SET status = ? WHERE id = ?";
+                PreparedStatement updateStmt = conn.prepareStatement(updateSQL);
+                updateStmt.setString(1, "Resolved");
+                updateStmt.setInt(2, 1);
+                
+                int rowsUpdated = updateStmt.executeUpdate();
+                if (rowsUpdated > 0) {
+                    System.out.println(">>> SUCCESS: Incident ID 1 Status Updated to 'Resolved'!");
                 }
-                System.out.println("========================================================\n");
+
+                // ২. DELETE: উদাহরণ হিসেবে নির্দিষ্ট ID মুছে ফেলা (প্রয়োজন হলে নিচে আইডি পরিবর্তন করতে পারেন)
+                // String deleteSQL = "DELETE FROM incidents WHERE id = ?";
+                // PreparedStatement deleteStmt = conn.prepareStatement(deleteSQL);
+                // deleteStmt.setInt(1, 2); // ID 2 ডিলিট করবে
+                // deleteStmt.executeUpdate();
+
+                // ৩. VIEW ALL: হালনাগাদ ডাটাবেসের তালিকা দেখানো
+                printAllIncidents(conn);
 
                 conn.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // ডাটা প্রদর্শনের জন্য হেলপার মেথড
+    private static void printAllIncidents(Connection conn) throws Exception {
+        String selectSQL = "SELECT * FROM incidents";
+        Statement selectStmt = conn.createStatement();
+        ResultSet rs = selectStmt.executeQuery(selectSQL);
+
+        System.out.println("\n================ RESQHUB INCIDENTS LIST ================");
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String location = rs.getString("location");
+            String type = rs.getString("emergency_type");
+            String status = rs.getString("status");
+            String time = rs.getString("created_at");
+
+            System.out.println("ID: " + id + " | Location: " + location + " | Type: " + type + " | Status: " + status + " | Time: " + time);
+        }
+        System.out.println("========================================================\n");
     }
 }
