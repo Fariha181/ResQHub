@@ -10,28 +10,16 @@ public class Incident {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
     private String title;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "location")
     private String location;
-
-    @Column(name = "status")
     private String status;
+    private String incidentType;   // E.g., FIRE, MEDICAL
+    private String assignedAgency; // Factory auto populate korbe
 
     public Incident() {}
 
-    public Incident(String title, String description, String location, String status) {
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.status = status;
-    }
-
-    // Getters and Setters
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -46,4 +34,10 @@ public class Incident {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getIncidentType() { return incidentType; }
+    public void setIncidentType(String incidentType) { this.incidentType = incidentType; }
+
+    public String getAssignedAgency() { return assignedAgency; }
+    public void setAssignedAgency(String assignedAgency) { this.assignedAgency = assignedAgency; }
 }
