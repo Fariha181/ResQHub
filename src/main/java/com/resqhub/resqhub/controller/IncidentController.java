@@ -5,6 +5,7 @@ import com.resqhub.resqhub.factory.ResponderFactory;
 import com.resqhub.resqhub.model.Incident;
 import com.resqhub.resqhub.observer.AgencyNotifier;
 import com.resqhub.resqhub.repository.IncidentRepository;
+import com.resqhub.resqhub.singleton.SystemLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +22,14 @@ public class IncidentController {
     private ResponderFactory responderFactory;
 
     @Autowired
-    private AgencyNotifier agencyNotifier; // Observer Injected
+    private AgencyNotifier agencyNotifier;
 
     @PostMapping
     public Incident createIncident(@RequestBody Incident incident) {
-        // Factory Pattern
+        // Singleton Pattern Call
+        SystemLogger.getInstance().log("Creating new incident: " + incident.getTitle());
+
+        // Factory Pattern Call
         Responder responder = responderFactory.getResponder(incident.getIncidentType());
 
         if (responder != null) {
@@ -37,7 +41,10 @@ public class IncidentController {
         incident.setStatus("OPEN");
         Incident savedIncident = incidentRepository.save(incident);
 
-        // Observer Pattern: Broadcast Alert Notification
+        // Singleton Log
+        SystemLogger.getInstance().log("Incident saved with ID: " + savedIncident.getId());
+
+        // Observer Pattern Call
         agencyNotifier.onIncidentCreated(
             savedIncident.getTitle(), 
             savedIncident.getLocation(), 
@@ -49,6 +56,7 @@ public class IncidentController {
 
     @GetMapping
     public List<Incident> getAllIncidents() {
+        SystemLogger.getInstance().log("Fetching all incidents from database");
         return incidentRepository.findAll();
     }
 }
