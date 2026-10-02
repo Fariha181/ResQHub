@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Police SOS - ResQHub</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <header>
+
+        <h2>ResQHub</h2>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="emergency.html">Report Emergency</a>
+            <a href="hospital.html">Hospitals</a>
+            <a href="ambulance.html">Ambulance</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="login.html">Login</a>
+        </nav>
+
+    </header>
+
+
+    <!-- Police SOS Section -->
+
+    <main>
+
+        <section class="emergency-page">
+
+            <div class="emergency-header">
+
+                <p class="section-tag">
+                    POLICE EMERGENCY
+                </p>
+
+                <h1>
+                    Police SOS Alert
+                </h1>
+
+                <p>
+                    Send an emergency alert to the nearest
+                    available police station.
+                </p>
+
+            </div>
+
+
+            <!-- SOS Form -->
+
+            <div class="emergency-form">
+
+                <label for="area">
+                    Emergency Area
+                </label>
+
+                <input
+                    type="text"
+                    id="area"
+                    placeholder="Enter emergency area"
+                    required
+                >
+
+
+                <label for="description">
+                    Emergency Description
+                </label>
+
+                <textarea
+                    id="description"
+                    rows="5"
+                    placeholder="Describe the emergency"
+                    required
+                ></textarea>
+
+
+                <button
+                    class="emergency-btn"
+                    onclick="sendPoliceSOS()">
+
+                    🚨 Send Police SOS
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>
+            © 2026 ResQHub. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        function sendPoliceSOS() {
+
+            const area =
+                document.getElementById("area").value;
+
+            const description =
+                document.getElementById("description").value;
+
+
+            if (area === "" || description === "") {
+
+                alert(
+                    "Please enter the emergency area and description."
+                );
+
+                return;
+            }
+
+
+            alert(
+                "Police SOS Alert Submitted Successfully!\n\n" +
+                "Area: " + area +
+                "\nDescription: " + description
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

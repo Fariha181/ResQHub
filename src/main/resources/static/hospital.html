@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Hospitals - ResQHub</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head><body><!-- Navigation Bar -->
+<header>
+    <h2>ResQHub</h2>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="emergency.html">Report Emergency</a>
+        <a href="hospital.html">Hospitals</a>
+        <a href="ambulance.html">Ambulance</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="login.html">Login</a>
+    </nav>
+</header>
+
+
+<!-- Hospital Section -->
+<main>
+
+    <section class="hospital-page">
+
+        <div class="hospital-header">
+
+            <p class="section-tag">HOSPITAL SUPPORT</p>
+
+            <h1>Hospital Availability</h1>
+
+            <p>
+                View hospitals and check their current
+                emergency bed availability.
+            </p>
+
+        </div>
+
+
+        <!-- Hospital Search -->
+        <div class="hospital-search">
+
+            <input
+                type="text"
+                placeholder="Search hospital or location">
+
+            <button>Search</button>
+
+        </div>
+
+
+        <!-- Hospital Cards -->
+        <div class="hospital-container">
+
+            <!-- Hospital 1 -->
+            <div class="hospital-card">
+
+                <div class="hospital-icon">🏥</div>
+
+                <h3>City General Hospital</h3>
+
+                <p>📍 Main City Area</p>
+
+                <p>
+                    <strong>ICU Beds:</strong> 12
+                </p>
+
+                <p>
+                    <strong>General Beds:</strong> 35
+                </p>
+
+                <span class="available">
+                    ● Available
+                </span>
+
+                <button
+                    class="hospital-btn"
+                    onclick="viewHospital('City General Hospital')">
+                    View Details
+                </button>
+
+            </div>
+
+
+            <!-- Hospital 2 -->
+            <div class="hospital-card">
+
+                <div class="hospital-icon">🏥</div>
+
+                <h3>Central Medical Center</h3>
+
+                <p>📍 Central Area</p>
+
+                <p>
+                    <strong>ICU Beds:</strong> 8
+                </p>
+
+                <p>
+                    <strong>General Beds:</strong> 20
+                </p>
+
+                <span class="available">
+                    ● Available
+                </span>
+
+                <button
+                    class="hospital-btn"
+                    onclick="viewHospital('Central Medical Center')">
+                    View Details
+                </button>
+
+            </div>
+
+
+            <!-- Hospital 3 -->
+            <div class="hospital-card">
+
+                <div class="hospital-icon">🏥</div>
+
+                <h3>Life Care Hospital</h3>
+
+                <p>📍 North City</p>
+
+                <p>
+                    <strong>ICU Beds:</strong> 2
+                </p>
+
+                <p>
+                    <strong>General Beds:</strong> 7
+                </p>
+
+                <span class="limited">
+                    ● Limited Capacity
+                </span>
+
+                <button
+                    class="hospital-btn"
+                    onclick="viewHospital('Life Care Hospital')">
+                    View Details
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- Footer -->
+<footer>
+    <p>© 2026 ResQHub. All rights reserved.</p>
+</footer>
+
+
+<script>
+
+    function viewHospital(hospitalName) {
+
+        alert(
+            hospitalName +
+            "\n\nICU and General bed availability shown." +
+            "\n\nHospital details are available."
+        );
+
+    }
+
+</script>
+
+</body> 
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard - ResQHub</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head><body><!-- Navigation Bar -->
+<header>
+    <h2>ResQHub</h2>
+
+    <nav>
+    <a href="index.html">Home</a>
+    <a href="emergency.html">Report Emergency</a>
+    <a href="hospital.html">Hospitals</a>
+    <a href="ambulance.html">Ambulance</a>
+    <a href="police.html">Police SOS</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Login</a>
+</nav>
+</header>
+
+
+<!-- Dashboard -->
+<main>
+
+    <section class="dashboard-page">
+
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+
+            <p class="section-tag">RESQHUB CONTROL CENTER</p>
+
+            <h1>Emergency Response Dashboard</h1>
+
+            <p>
+                Monitor emergency incidents, available units,
+                hospitals and response activities.
+            </p>
+
+        </div>
+
+
+        <!-- Dashboard Statistics -->
+        <div class="dashboard-grid">
+
+            <div class="stat-card">
+                <h4>Active Incidents</h4>
+                <div class="number">12</div>
+            </div>
+
+            <div class="stat-card">
+                <h4>Available Ambulances</h4>
+                <div class="number">8</div>
+            </div>
+
+            <div class="stat-card">
+                <h4>Available Hospitals</h4>
+                <div class="number">5</div>
+            </div>
+
+            <div class="stat-card">
+                <h4>Active Alerts</h4>
+                <div class="number">3</div>
+            </div>
+
+        </div>
+
+
+        <!-- Active Emergency Incidents -->
+        <div class="dashboard-section">
+
+            <h2>Active Emergency Incidents</h2>
+
+            <div class="dashboard-table">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Incident ID</th>
+                            <th>Emergency Type</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>#101</td>
+                            <td>Accident</td>
+                            <td>Central City</td>
+                            <td>
+                                <span class="status status-busy">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>#102</td>
+                            <td>Medical Emergency</td>
+                            <td>North City</td>
+                            <td>
+                                <span class="status status-warning">
+                                    Assigned
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>#103</td>
+                            <td>Fire</td>
+                            <td>South City</td>
+                            <td>
+                                <span class="status status-available">
+                                    Resolved
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- Quick Actions -->
+        <div class="dashboard-section quick-actions">
+
+            <h2>Quick Actions</h2>
+
+            <div class="action-buttons">
+
+                <a href="emergency.html" class="action-btn">
+                    🚨 Report Emergency
+                </a>
+
+                <a href="ambulance.html" class="action-btn">
+                    🚑 Manage Ambulances
+                </a>
+
+                <a href="hospital.html" class="action-btn">
+                    🏥 View Hospitals
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Recent Notifications -->
+        <div class="dashboard-section notification-section">
+
+            <h2>Recent Notifications</h2>
+
+            <div class="notification-list">
+
+                <div class="notification-item">
+
+                    <div class="notification-icon">
+                        🚨
+                    </div>
+
+                    <div class="notification-content">
+
+                        <h4>New Emergency Report</h4>
+
+                        <p>
+                            Accident reported in Central City.
+                        </p>
+
+                        <span>
+                            2 minutes ago
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="notification-item">
+
+                    <div class="notification-icon">
+                        🚑
+                    </div>
+
+                    <div class="notification-content">
+
+                        <h4>Ambulance Assigned</h4>
+
+                        <p>
+                            Ambulance A-101 has been assigned.
+                        </p>
+
+                        <span>
+                            5 minutes ago
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="notification-item">
+
+                    <div class="notification-icon">
+                        🏥
+                    </div>
+
+                    <div class="notification-content">
+
+                        <h4>Hospital Availability Updated</h4>
+
+                        <p>
+                            City General Hospital has available capacity.
+                        </p>
+
+                        <span>
+                            10 minutes ago
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<!-- Footer -->
+<footer>
+    <p>© 2026 ResQHub. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
