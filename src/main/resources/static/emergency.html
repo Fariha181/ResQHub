@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Emergency - ResQHub</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <h2>ResQHub</h2>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="emergency.html">Report Emergency</a>
+            <a href="#">Hospitals</a>
+            <a href="#">Login</a>
+        </nav>
+    </header>
+
+
+    <!-- Emergency Report Section -->
+    <main>
+
+        <section class="emergency-page">
+
+            <div class="emergency-header">
+
+                <p class="section-tag">EMERGENCY RESPONSE</p>
+
+                <h1>Report an Emergency</h1>
+
+                <p>
+                    Provide the emergency details below so that
+                    the response team can take appropriate action quickly.
+                </p>
+
+            </div>
+
+
+            <!-- Emergency Form -->
+            <div class="emergency-form">
+
+                <div class="form-group">
+                    <label for="emergency-type">
+                        Emergency Type
+                    </label>
+
+                    <select id="emergency-type">
+                        <option>Select emergency type</option>
+                        <option>Medical Emergency</option>
+                        <option>Accident</option>
+                        <option>Fire</option>
+                        <option>Natural Disaster</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="location">
+                        Emergency Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        placeholder="Enter emergency location">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="description">
+                        Emergency Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="5"
+                        placeholder="Describe the emergency situation"></textarea>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="people">
+                        Number of People Affected
+                    </label>
+
+                    <input
+                        type="number"
+                        id="people"
+                        placeholder="Enter number of people">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="phone">
+                        Contact Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter contact number">
+                </div>
+
+              <button class="emergency-btn" onclick="submitEmergency()">
+              Submit Emergency Report
+              </button>
+
+                
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 ResQHub. All rights reserved.</p>
+    </footer>
+    <script>
+function submitEmergency() {
+    alert("Emergency report submitted successfully!");
+}
+</script>
+
+</body>
+
+</html>

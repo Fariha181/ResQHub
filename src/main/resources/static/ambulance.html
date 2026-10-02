@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Emergency Units - ResQHub</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+
+        <h2>ResQHub</h2>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="emergency.html">Report Emergency</a>
+            <a href="hospital.html">Hospitals</a>
+            <a href="ambulance.html">Ambulance</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="login.html">Login</a>
+        </nav>
+
+    </header>
+
+
+    <!-- Emergency Units -->
+
+    <main>
+
+        <section class="ambulance-page">
+
+            <div class="ambulance-header">
+
+                <p class="section-tag">
+                    EMERGENCY RESPONSE UNITS
+                </p>
+
+                <h1>
+                    Available Emergency Units
+                </h1>
+
+                <p>
+                    Dispatch emergency responders and manage
+                    available response units.
+                </p>
+
+            </div>
+
+
+            <!-- Responder Cards -->
+
+            <div class="ambulance-container">
+
+
+                <!-- Ambulance -->
+
+                <div class="ambulance-card">
+
+                    <div class="ambulance-icon">
+                        🚑
+                    </div>
+
+                    <h3>
+                        Ambulance
+                    </h3>
+
+                    <p>
+                        Medical emergency response unit.
+                    </p>
+
+                    <span class="unit-available">
+                        ● Available
+                    </span>
+
+                    <button
+                        class="request-btn"
+                        onclick="dispatchResponder('AMBULANCE')">
+
+                        Dispatch Ambulance
+
+                    </button>
+
+                </div>
+
+
+                <!-- Fire Truck -->
+
+                <div class="ambulance-card">
+
+                    <div class="ambulance-icon">
+                        🚒
+                    </div>
+
+                    <h3>
+                        Fire Truck
+                    </h3>
+
+                    <p>
+                        Fire and rescue emergency response unit.
+                    </p>
+
+                    <span class="unit-available">
+                        ● Available
+                    </span>
+
+                    <button
+                        class="request-btn"
+                        onclick="dispatchResponder('FIRE_TRUCK')">
+
+                        Dispatch Fire Truck
+
+                    </button>
+
+                </div>
+
+
+                <!-- Police Patrol -->
+
+                <div class="ambulance-card">
+
+                    <div class="ambulance-icon">
+                        👮
+                    </div>
+
+                    <h3>
+                        Police Patrol
+                    </h3>
+
+                    <p>
+                        Police and security emergency response unit.
+                    </p>
+
+                    <span class="unit-available">
+                        ● Available
+                    </span>
+
+                    <button
+                        class="request-btn"
+                        onclick="dispatchResponder('POLICE_PATROL')">
+
+                        Dispatch Police Patrol
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>
+            © 2026 ResQHub. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        function dispatchResponder(responderType) {
+
+            alert(
+                responderType +
+                " dispatch request submitted successfully!"
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>
