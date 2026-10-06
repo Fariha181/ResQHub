@@ -41,17 +41,17 @@
         <!-- Hospital Search -->
         <div class="hospital-search">
 
-            <input
+            <input id="hospital-search"
                 type="text"
                 placeholder="Search hospital or location">
 
-            <button>Search</button>
+            <button onclick="filterHospitals()">Search</button>
 
         </div>
 
 
         <!-- Hospital Cards -->
-        <div class="hospital-container">
+        <div class="hospital-container" id="hospital-container">
 
             <!-- Hospital 1 -->
             <div class="hospital-card">
@@ -157,7 +157,70 @@
 
 <script>
 
+    let hospitals = [];
+
+    async function loadHospitals() {
+        const container = document.getElementById("hospital-container");
+        container.innerHTML = "<p>Loading hospital data...</p>";
+        try {
+            const response = await fetch("/api/hospitals/all");
+            if (!response.ok) throw new Error();
+            hospitals = await response.json();
+            renderHospitals(hospitals);
+        } catch (error) {
+            container.innerHTML = "<p>Unable to load hospital data.</p>";
+        }
+    }
+
+    function filterHospitals() {
+        const query = document.getElementById("hospital-search").value.toLowerCase();
+        renderHospitals(hospitals.filter(hospital =>
+            (hospital.name || "").toLowerCase().includes(query) ||
+            (hospital.location || "").toLowerCase().includes(query)
+        ));
+    }
+
+    function renderHospitals(items) {
+        const container = document.getElementById("hospital-container");
+        if (!items.length) {
+            container.innerHTML = "<p>No hospitals found.</p>";
+            return;
+        }
+
+        container.innerHTML = items.map(hospital => {
+            const totalBeds = hospital.availableIcuBeds + hospital.availableGeneralBeds;
+            const capacityClass = totalBeds <= 10 ? "limited" : "available";
+            const capacityText = totalBeds <= 10 ? "Limited Capacity" : "Available";
+            return `
+                <div class="hospital-card">
+                    <div class="hospital-icon">🏥</div>
+                    <h3>${escapeHtml(hospital.name)}</h3>
+                    <p>📍 ${escapeHtml(hospital.location)}</p>
+                    <p><strong>ICU Beds:</strong> ${hospital.availableIcuBeds}</p>
+                    <p><strong>General Beds:</strong> ${hospital.availableGeneralBeds}</p>
+                    <span class="${capacityClass}">● ${capacityText}</span>
+                    <button class="hospital-btn" onclick="viewHospital(${hospital.id})">View Details</button>
+                </div>`;
+        }).join("");
+    }
+
+    function escapeHtml(value) {
+        return String(value || "").replace(/[&<>'"]/g, character => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", "\"": "&quot;"
+        }[character]));
+    }
+
     function viewHospital(hospitalName) {
+
+        const hospital = hospitals.find(item => item.id === hospitalName);
+        if (hospital) {
+            alert(
+                hospital.name + "\n\nLocation: " + hospital.location +
+                "\n\nICU Beds: " + hospital.availableIcuBeds +
+                "\nGeneral Beds: " + hospital.availableGeneralBeds
+            );
+            return;
+        }
 
         alert(
             hospitalName +
@@ -166,6 +229,8 @@
         );
 
     }
+
+    loadHospitals();
 
 </script>
 

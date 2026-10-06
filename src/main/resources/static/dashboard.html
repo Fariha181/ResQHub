@@ -45,22 +45,22 @@
 
             <div class="stat-card">
                 <h4>Active Incidents</h4>
-                <div class="number">12</div>
+                <div class="number" id="active-incidents-count">0</div>
             </div>
 
             <div class="stat-card">
                 <h4>Available Ambulances</h4>
-                <div class="number">8</div>
+                <div class="number" id="available-ambulances-count">-</div>
             </div>
 
             <div class="stat-card">
                 <h4>Available Hospitals</h4>
-                <div class="number">5</div>
+                <div class="number" id="available-hospitals-count">-</div>
             </div>
 
             <div class="stat-card">
                 <h4>Active Alerts</h4>
-                <div class="number">3</div>
+                <div class="number" id="active-alerts-count">-</div>
             </div>
 
         </div>
@@ -70,6 +70,7 @@
         <div class="dashboard-section">
 
             <h2>Active Emergency Incidents</h2>
+            <button class="action-btn" id="refresh-dashboard-btn" onclick="loadDashboard()">Refresh Data</button>
 
             <div class="dashboard-table">
 
@@ -81,10 +82,11 @@
                             <th>Emergency Type</th>
                             <th>Location</th>
                             <th>Status</th>
+                            <th>Assigned Agency</th>
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="incident-table-body">
 
                         <tr>
                             <td>#101</td>
@@ -241,6 +243,66 @@
 <footer>
     <p>© 2026 ResQHub. All rights reserved.</p>
 </footer>
+<script>
+async function loadDashboard() {
+    const tableBody = document.getElementById("incident-table-body");
+    const refreshButton = document.getElementById("refresh-dashboard-btn");
+    tableBody.innerHTML = '<tr><td colspan="5">Loading incidents...</td></tr>';
+    refreshButton.disabled = true;
+
+    try {
+        const [incidentResponse, resourceResponse, hospitalResponse] = await Promise.all([
+            fetch("/api/incidents"),
+            fetch("/api/resources/status"),
+            fetch("/api/hospitals/all")
+        ]);
+
+        if (!incidentResponse.ok || !resourceResponse.ok || !hospitalResponse.ok) {
+            throw new Error("Unable to load dashboard data.");
+        }
+
+        const incidents = await incidentResponse.json();
+        const resourceText = await resourceResponse.text();
+        const hospitals = await hospitalResponse.json();
+        const activeIncidents = incidents.filter(incident => incident.status === "OPEN");
+
+        document.getElementById("active-incidents-count").textContent = activeIncidents.length;
+        document.getElementById("available-ambulances-count").textContent =
+            (resourceText.match(/\d+/) || ["0"])[0];
+        document.getElementById("available-hospitals-count").textContent = hospitals.length;
+        document.getElementById("active-alerts-count").textContent = "-";
+
+        tableBody.innerHTML = incidents.length ? incidents.map(incident => `
+            <tr>
+                <td>#${incident.id}</td>
+                <td>${escapeHtml(incident.incidentType || incident.title || "Unknown")}</td>
+                <td>${escapeHtml(incident.location || "-")}</td>
+                <td><span class="status ${statusClass(incident.status)}">${escapeHtml(incident.status || "Unknown")}</span></td>
+                <td>${escapeHtml(incident.assignedAgency || "-")}</td>
+            </tr>
+        `).join("") : '<tr><td colspan="5">No incidents reported yet.</td></tr>';
+    } catch (error) {
+        tableBody.innerHTML = '<tr><td colspan="5">Unable to load incidents.</td></tr>';
+        document.getElementById("active-incidents-count").textContent = "-";
+    } finally {
+        refreshButton.disabled = false;
+    }
+}
+
+function statusClass(status) {
+    if (status === "OPEN") return "status-busy";
+    if (status === "RESOLVED") return "status-available";
+    return "status-warning";
+}
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>'"]/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", "\"": "&quot;"
+    }[character]));
+}
+
+loadDashboard();
+</script>
 
 </body>
 </html>

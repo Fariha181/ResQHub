@@ -1,10 +1,19 @@
 package com.resqhub.resqhub.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class IncidentRequest {
+    @NotBlank(message = "Title is required")
     private String title;
+
+    @NotBlank(message = "Description is required")
     private String description;
+
+    @NotBlank(message = "Location is required")
     private String location;
-    private String status;
+
+    @NotBlank(message = "Incident type is required")
+    private String incidentType;
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -15,6 +24,6 @@ public class IncidentRequest {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getIncidentType() { return incidentType; }
+    public void setIncidentType(String incidentType) { this.incidentType = incidentType; }
 }

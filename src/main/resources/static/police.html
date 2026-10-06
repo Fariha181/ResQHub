@@ -82,13 +82,14 @@
                 ></textarea>
 
 
-                <button
+                <button id="police-sos-btn"
                     class="emergency-btn"
                     onclick="sendPoliceSOS()">
 
                     🚨 Send Police SOS
 
                 </button>
+                <p id="police-message" role="status"></p>
 
             </div>
 
@@ -110,30 +111,43 @@
 
     <script>
 
-        function sendPoliceSOS() {
+        async function sendPoliceSOS() {
 
             const area =
-                document.getElementById("area").value;
+                document.getElementById("area").value.trim();
 
             const description =
-                document.getElementById("description").value;
+                document.getElementById("description").value.trim();
+
+            const message = document.getElementById("police-message");
+            const button = document.getElementById("police-sos-btn");
 
 
             if (area === "" || description === "") {
 
-                alert(
-                    "Please enter the emergency area and description."
-                );
+                message.textContent = "Please enter the emergency area and description.";
 
                 return;
             }
 
 
-            alert(
-                "Police SOS Alert Submitted Successfully!\n\n" +
-                "Area: " + area +
-                "\nDescription: " + description
-            );
+            button.disabled = true;
+            message.textContent = "Sending police SOS...";
+
+            try {
+                const params = new URLSearchParams({ area, description });
+                const response = await fetch("/api/police/sos-alert?" + params.toString(), {
+                    method: "POST"
+                });
+                const result = await response.text();
+                message.textContent = result;
+                message.style.color = response.ok ? "#22c55e" : "#ef4444";
+            } catch (error) {
+                message.textContent = "Unable to send police SOS.";
+                message.style.color = "#ef4444";
+            } finally {
+                button.disabled = false;
+            }
 
         }
 
