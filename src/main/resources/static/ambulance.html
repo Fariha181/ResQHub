@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body onload="loadResourceStatus()">
 
     <!-- Navigation Bar -->
     <header>
@@ -74,17 +74,18 @@
                         Medical emergency response unit.
                     </p>
 
-                    <span class="unit-available">
+                    <span class="unit-available" id="ambulance-status">
                         ● Available
                     </span>
 
-                    <button
+                    <button id="reserve-ambulance-btn"
                         class="request-btn"
-                        onclick="dispatchResponder('AMBULANCE')">
+                        onclick="reserveAmbulance()">
 
-                        Dispatch Ambulance
+                        Reserve Ambulance
 
                     </button>
+                    <p id="resource-message" role="status"></p>
 
                 </div>
 
@@ -170,6 +171,39 @@
 
 
     <script>
+
+        async function loadResourceStatus() {
+            const status = document.getElementById("ambulance-status");
+            try {
+                const response = await fetch("/api/resources/status");
+                if (!response.ok) throw new Error();
+                status.textContent = "Available: " + await response.text();
+            } catch (error) {
+                status.textContent = "Unable to load ambulance status";
+            }
+        }
+
+        async function reserveAmbulance() {
+            const status = document.getElementById("ambulance-status");
+            const message = document.getElementById("resource-message");
+            const reserveButton = document.getElementById("reserve-ambulance-btn");
+            reserveButton.disabled = true;
+            message.textContent = "Requesting ambulance...";
+            try {
+                const response = await fetch("/api/resources/reserve?requester=Emergency%20Dashboard", {
+                    method: "POST"
+                });
+                const result = await response.text();
+                message.textContent = result;
+                message.style.color = response.ok && result.startsWith("SUCCESS") ? "#22c55e" : "#ef4444";
+                loadResourceStatus();
+            } catch (error) {
+                message.textContent = "Unable to reserve ambulance.";
+                message.style.color = "#ef4444";
+            } finally {
+                reserveButton.disabled = false;
+            }
+        }
 
         function dispatchResponder(responderType) {
 

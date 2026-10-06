@@ -53,12 +53,12 @@
                     </label>
 
                     <select id="emergency-type">
-                        <option>Select emergency type</option>
-                        <option>Medical Emergency</option>
-                        <option>Accident</option>
-                        <option>Fire</option>
-                        <option>Natural Disaster</option>
-                        <option>Other</option>
+                        <option value="">Select emergency type</option>
+                        <option value="MEDICAL">Medical Emergency</option>
+                        <option value="ACCIDENT">Accident</option>
+                        <option value="FIRE">Fire</option>
+                        <option value="NATURAL_DISASTER">Natural Disaster</option>
+                        <option value="OTHER">Other</option>
                     </select>
                 </div>
 
@@ -110,9 +110,11 @@
                         placeholder="Enter contact number">
                 </div>
 
-              <button class="emergency-btn" onclick="submitEmergency()">
+              <button class="emergency-btn" id="submit-emergency-btn" onclick="submitEmergency()">
               Submit Emergency Report
               </button>
+
+              <p id="incident-message" role="status"></p>
 
                 
             </div>
@@ -126,9 +128,43 @@
     <footer>
         <p>© 2026 ResQHub. All rights reserved.</p>
     </footer>
-    <script>
-function submitEmergency() {
-    alert("Emergency report submitted successfully!");
+<script>
+async function submitEmergency() {
+    const type = document.getElementById("emergency-type").value;
+    const location = document.getElementById("location").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const message = document.getElementById("incident-message");
+    const submitButton = document.getElementById("submit-emergency-btn");
+    const typeLabel = document.getElementById("emergency-type").selectedOptions[0].text;
+
+    message.textContent = "Submitting emergency report...";
+    submitButton.disabled = true;
+
+    try {
+        const response = await fetch("/api/incidents", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title: typeLabel,
+                incidentType: type,
+                location: location,
+                description: description
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errors = data.fieldErrors ? Object.values(data.fieldErrors).join(" ") : data.error;
+            throw new Error(errors || "Unable to submit emergency report.");
+        }
+
+        message.textContent = "Report #" + data.id + " submitted. Assigned agency: " + data.assignedAgency + ".";
+    } catch (error) {
+        message.textContent = error.message || "Unable to submit emergency report.";
+    } finally {
+        submitButton.disabled = false;
+    }
 }
 </script>
 
